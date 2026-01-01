@@ -1,0 +1,101 @@
+/* RESET (important to avoid extra scrollbars) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-y: auto; /* single scrollbar */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* MAIN CONTAINER */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* LEFT SIDEBAR */
+.admin-topic-name {
+  position: sticky;
+  top: 0;
+  width: 15rem;
+  height: 100vh;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-right: 1px solid #dcdcdc;
+}
+
+/* LOGO */
+.logo {
+  height: 40px;
+  width: auto;
+  margin-bottom: 1.5rem;
+}
+
+/* MENU ITEMS */
+.admin-content p {
+  margin: 0.75rem 0;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.4rem 0.3rem;
+  border-radius: 4px;
+}
+
+.admin-content p:hover {
+  background-color: #f5f5f5;
+}
+
+.content-div {
+    display: flex;
+    align-items: center;
+}
+
+.content-div img {
+  width: 40px;
+  height: 40px;
+}
+
+/* ACTIVE / INACTIVE STATES */
+.active {
+  font-weight: bold;
+  color: #000;
+}
+
+.non-active {
+  color: #555;
+}
+
+/* VERTICAL LINE (optional – already in sidebar border) */
+.vertical-line {
+  display: none;
+}
+
+/* RIGHT CONTENT AREA */
+.admin-topic-details-scrollview {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  background-color: #fafafa;
+}
+
+/* CONTENT WRAPPER */
+.scrollable-section {
+  width: 100%;
+}
+
+/* PAGE TITLE */
+.admin-topic-details-scrollview h1 {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+/* DEMO CONTENT HEIGHT (remove later) */
+/*
+.admin-topic-details {
+  min-height: 150vh;
+}
+*/

@@ -1,0 +1,105 @@
+.post-card {
+  width: 480px;
+  margin: 20px auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.username {
+  font-weight: 600;
+}
+
+/* IMAGE */
+.post-image {
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 420px;
+}
+
+.post-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ACTIONS */
+.post-actions {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.post-actions .liked {
+  color: red;
+}
+
+.likes {
+  margin-left: 10px;
+  font-weight: 600;
+}
+
+/* CAPTION */
+.post-caption {
+  padding: 0 12px 10px;
+  font-size: 14px;
+}
+
+/* COMMENTS */
+.post-comments {
+  padding: 0 12px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.post-comments p {
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+/* ADD COMMENT */
+.comment-box {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.comment-box input {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  outline: none;
+}
+
+.comment-box button {
+  border: none;
+  background: none;
+  color: #0095f6;
+  font-weight: 600;
+  padding: 0 12px;
+  cursor: pointer;
+}
