@@ -5,8 +5,8 @@ import LogInForm from "./routes/LogInForm.jsx";
 import Admin from "./routes/Admin.jsx"
 import ErrorPage from "./error.page.jsx";
 
-import { GlobalStateProvider } from "./Context/Global_Context";
-import { GlobalMethodsProvider } from "./Context/GlobalMethodsContext";
+import { GlobalStateProvider } from "./Context/Global_Context.js";
+import { GlobalMethodsProvider } from "./Context/GlobalMethodsContext.js";
 import Home from "./routes/Home.jsx";
 
 const router = createBrowserRouter([
