@@ -8,8 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 649px;
-  width: 1400px;
+  height: 100vh;
 }
 
 .form-container {

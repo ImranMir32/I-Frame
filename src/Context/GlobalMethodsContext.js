@@ -8,19 +8,21 @@ const GlobalMethodsProvider = ({ children }) => {
   const { user, setUserName, setToken, setUser } =
     useContext(GlobalStateContext);
 
+  const baseURL = "http://localhost:4000/api";
+
   const SignIn = async (values) => {
     try {
-      const url = "http://localhost:4000/api/users/login";
+      const url = `${baseURL}/user/login`;
       const response = await axios({
         method: "POST",
         url,
         data: values,
       });
-      //   console.log("name: ", response.data.access_token);
-      setUserName(response.data.user.name);
-      setToken(response.data.access_token);
-      setUser(response.data.user);
-      return response.status;
+        console.log("name: ", response.data);
+      // setUserName(response.data.user.name);
+      // setToken(response.data.access_token);
+      // setUser(response.data.user);
+      // return response.status;
     } catch (error) {
       console.log(error.message);
       return 401;
