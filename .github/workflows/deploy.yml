@@ -23,7 +23,7 @@ jobs:
 
       - name: Build
         run: |
-          npm run build
+          CI=false npm run build
 
       - name: Upload to Azure Storage
         uses: azure/CLI@v1
