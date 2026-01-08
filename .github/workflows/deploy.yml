@@ -3,7 +3,7 @@ name: Deploy Frontend to Azure Blob
 on:
   push:
     branches:
-      - main  # Set this to your default branch
+      - ui  # Set this to your default branch
 
 jobs:
   build-and-deploy:
