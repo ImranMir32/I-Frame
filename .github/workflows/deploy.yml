@@ -1,0 +1,34 @@
+name: Deploy Frontend to Azure Blob
+
+on:
+  push:
+    branches:
+      - main  # Set this to your default branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use your project's Node version
+
+      - name: Install & Build
+        run: |
+          npm install
+          npm run build 
+
+      - name: Upload to Azure Storage
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name photosharedatabase \
+              --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
+              --source ./dist \
+              --destination '$web' \
+              --overwrite
