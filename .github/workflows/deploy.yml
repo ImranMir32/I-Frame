@@ -29,6 +29,6 @@ jobs:
             az storage blob upload-batch \
               --account-name photosharedatabase \
               --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
-              --source ./built \
+              --source ./build \
               --destination '$web' \
               --overwrite
