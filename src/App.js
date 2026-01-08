@@ -12,7 +12,7 @@ import Home from "./routes/Home.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <LogInForm />,
     errorElement: <ErrorPage />,
   },
 
