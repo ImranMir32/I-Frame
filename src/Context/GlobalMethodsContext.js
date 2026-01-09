@@ -1,14 +1,36 @@
 import { GlobalStateContext } from "./Global_Context";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import axios from "axios";
 
 const GlobalMethodsContext = createContext();
 
 const GlobalMethodsProvider = ({ children }) => {
-  const { user, setUserName, setToken, setUser } =
+  const { user, token, setToken, setUser } =
     useContext(GlobalStateContext);
 
-  const baseURL = "http://localhost:4000/api";
+   // Load token and user data from local storage
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [setToken, setUser]);
+
+  // Update local storage whenever token or user changes
+  useEffect(() => {
+    localStorage.setItem("token", token);
+  }, [token]);
+
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
+
+  const baseURL = "http://localhost:8000/api";
 
   const SignIn = async (values) => {
     try {
@@ -18,11 +40,12 @@ const GlobalMethodsProvider = ({ children }) => {
         url,
         data: values,
       });
-        console.log("name: ", response.data);
+
       // setUserName(response.data.user.name);
-      // setToken(response.data.access_token);
-      // setUser(response.data.user);
-      // return response.status;
+      setToken(response.data.access_token);
+      console.log("user data in SignIn: ", response.data.user);
+      setUser(response.data.user);
+      return response;
     } catch (error) {
       console.log(error.message);
       return 401;
@@ -31,7 +54,7 @@ const GlobalMethodsProvider = ({ children }) => {
 
   const SignUp = async (values) => {
     try {
-      const url = "http://localhost:4000/api/users/signin";
+      const url = `${baseURL}/user/register`;
       const response = await axios({
         method: "POST",
         url,
@@ -45,77 +68,160 @@ const GlobalMethodsProvider = ({ children }) => {
     }
   };
 
-  const imgUpload = async (values) => {
+  const AllPosts = async () => {
     try {
-      await axios.post("http://localhost:4000/api/image/upload", values, {
+      const url = `${baseURL}/posts`; 
+      const response = await axios({
+        method: "GET",
+        url,
+      }); 
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+      return 500;
+    }
+  };
+
+
+  // NEW: Add comment to a post
+  const addComment = async (postId, commentData) => {
+    try {
+      const url = `${baseURL}/posts/${postId}/comment`;
+      const response = await axios({
+        method: "POST",
+        url,
+        data: commentData,
         headers: {
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // or your token storage
         },
       });
-      console.log("Image uploaded successfully");
+      console.log("Comment added:", response.data);
+      return response.data;
     } catch (error) {
-      console.log(error.message);
-      return 401;
+      console.log("Error adding comment:", error.message);
+      return { error: error.message, status: 500 };
     }
   };
 
-  const updateUser = async (values) => {
+  // NEW: Like a post
+  const likePost = async (postId) => {
     try {
-      const url = `http://localhost:4000/api/users/update/${user.email}`;
+      const url = `${baseURL}/posts/${postId}/like`;
       const response = await axios({
-        method: "PUT",
+        method: "POST",
         url,
-        data: values,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
-
-      console.log(response.data);
-      setUser(response.data);
-      setUserName(response.data.name);
-      return response.status;
+      console.log("Post liked:", response.data);
+      return response.data;
     } catch (error) {
-      console.log(error.message);
-      return 500;
+      console.log("Error liking post:", error.message);
+      return { error: error.message, status: 500 };
     }
   };
 
-  const resetPassword = async (values) => {
+  const unlikePost = async (postId) => {
     try {
-      const url = `http://localhost:4000/api/users/reset-password/${user.email}`;
+      const url = `${baseURL}/posts/${postId}/like`;
       const response = await axios({
-        method: "PUT",
+        method: "POST",
         url,
-        data: values,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
-
-      console.log(response.data);
-      setUser(response.data);
-      return response.status;
+      return response.data;
     } catch (error) {
-      console.log(error.message);
-      return 500;
+      console.log("Error unliking post:", error.message);
+      return { error: error.message, status: 500 };
     }
-  };
+};
 
-  const updateScore = async (values) => {
-    try {
-      const url = `http://localhost:4000/api/users/update-score/${user.email}`;
-      const response = await axios({
-        method: "PUT",
-        url,
-        data: values,
-      });
+  // Save a post
+const savePost = async (postId) => {
+  try {
+    const url = `${baseURL}/user/save-photo`;
+    const response = await axios({
+      method: "PUT",
+      url,
+      data: { postId },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    console.log("Post saved:", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("Error saving post:", error.message);
+    return { error: error.message, status: 500 };
+  }
+};
 
-      console.log(response.data);
-      setUser(response.data);
-      return response.status;
-    } catch (error) {
-      console.log(error.message);
-      return 500;
-    }
-  };
+// Unsave a post
+const unsavePost = async (postId) => {
+  try {
+    const url = `${baseURL}/user/unsave-post`;
+    const response = await axios({
+      method: "POST",
+      url,
+      data: { postId },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    console.log("Post unsaved:", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("Error unsaving post:", error.message);
+    return { error: error.message, status: 500 };
+  }
+};
+
+// const uploadPost = async (formData) => {
+//   try {
+//     const url = `${baseURL}/posts/create`;
+//     const response = await axios({
+//       method: "POST",
+//       url,
+//       data: formData,
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem('token')}`,
+//         'Content-Type': 'multipart/form-data',
+//       },
+//     });
+//     console.log("Post uploaded:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.log("Error uploading post:", error.message);
+//     return { error: error.message, status: 500 };
+//   }
+// };
+
+const uploadPost = async (formData) => {
+  try {
+    const url = `${baseURL}/posts/upload`;
+    const response = await axios({
+      method: "POST",
+      url,
+      data: formData,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log("Post uploaded:", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("Error uploading post:", error.message);
+    return { error: error.message, status: 500 };
+  }
+};
 
   const clearAllData = () => {
-    setUserName("");
+    // setUserName("");
     setToken("");
     setUser("");
   };
@@ -125,10 +231,13 @@ const GlobalMethodsProvider = ({ children }) => {
         clearAllData,
         SignIn,
         SignUp,
-        imgUpload,
-        updateUser,
-        resetPassword,
-        updateScore,
+        AllPosts,
+        addComment,
+        likePost,
+        unlikePost,
+        savePost,
+        unsavePost,
+        uploadPost
       }}
     >
       {children}

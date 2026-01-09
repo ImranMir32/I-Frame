@@ -31,7 +31,8 @@ const SignInForm = () => {
     if (res.status === 200) {
       localStorage.setItem("token", res.data.access_token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/home");
+      console.log("user role: ", res.user);
+      res.data.user.role === "admin" ? navigate("/admin-panel") : navigate("/home");
       actions.resetForm();
     } else {
       toast.error("Wrong email or password !", {

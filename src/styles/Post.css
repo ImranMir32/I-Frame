@@ -103,3 +103,10 @@
   padding: 0 12px;
   cursor: pointer;
 }
+
+.save-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  cursor: pointer;
+}
