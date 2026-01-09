@@ -142,6 +142,8 @@ const addComment = async (req, res) => {
     console.log("comment-");
     const postId = req.params.id;
     const userId = req.user.userId;
+    const userName = req.user.userName;
+
     const { text } = req.body;
 
     if (!text) {
@@ -155,6 +157,7 @@ const addComment = async (req, res) => {
     }
 
     const comment = {
+      userName,
       userId,
       text,
       createdAt: new Date().toISOString(),
