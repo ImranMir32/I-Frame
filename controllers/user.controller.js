@@ -79,6 +79,7 @@ const loginUser = async (req, res) => {
 
     const token = jwt.sign(
       {
+        userName: user.name,
         userId: user.id,
         email: user.email,
         role: user.role,
@@ -95,6 +96,7 @@ const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        savedPhotos: user.savedPhotos,
       },
     });
   } catch (error) {
@@ -109,10 +111,10 @@ const currentUser = async (req, res) => {
 const savePhoto = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { photoUrl } = req.body;
+    const { postId } = req.body;
 
-    if (!photoUrl) {
-      return res.status(400).json({ message: "Photo URL required" });
+    if (!postId) {
+      return res.status(400).json({ message: "Post ID required" });
     }
 
     const { resource: user } = await req.usersContainer.item(userId, userId).read();
@@ -121,13 +123,13 @@ const savePhoto = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (!user.savedPhotos.includes(photoUrl)) {
-      user.savedPhotos.push(photoUrl);
+    if (!user.savedPhotos.includes(postId)) {
+      user.savedPhotos.push(postId);
       await req.usersContainer.items.upsert(user);
     }
 
     res.status(200).json({
-      message: "Photo saved successfully",
+      message: "Post saved successfully",
       savedPhotos: user.savedPhotos,
     });
   } catch (error) {

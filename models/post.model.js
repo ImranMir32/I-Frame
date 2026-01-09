@@ -10,6 +10,7 @@ const postModel = Joi.object({
     .items(
       Joi.object({
         userId: Joi.string().required(),
+        userName: Joi.string().required(),
         text: Joi.string().required(),
         createdAt: Joi.date().default(Date.now),
       })
