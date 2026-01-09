@@ -1,26 +1,31 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 const GlobalStateContext = createContext();
 
 const GlobalStateProvider = ({ children }) => {
-  const [userName, setUserName] = useState("");
-  const [token, setToken] = useState("");
-  const [show, setShow] = useState(true);
-  const [user, setUser] = useState({});
-  const [userStatus, setUserStatus] = useState(false);
+  // Load data from local storage when the component mounts
+  const initialToken = localStorage.getItem("token") || "";
+  const initialUser = JSON.parse(localStorage.getItem("user")) || {};
+
+
+  const [token, setToken] = useState(initialToken);
+  const [user, setUser] = useState(initialUser);
+
+    // Update local storage whenever state changes
+  useEffect(() => {
+    localStorage.setItem("token", token);
+  }, [token]);
+
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
   return (
     <GlobalStateContext.Provider
       value={{
         user,
-        userName,
         token,
-        show,
         setUser,
-        setUserName,
         setToken,
-        setShow,
-        userStatus,
-        setUserStatus,
       }}
     >
       {children}

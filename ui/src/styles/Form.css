@@ -1,5 +1,5 @@
 :root {
-  --theme: rgb(24, 188, 230);
+  --theme: rgb(4, 22, 88);
   --warning: red;
   --success: rgb(4, 163, 4);
 }
@@ -8,8 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 649px;
-  width: 1400px;
+  height: 100vh;
 }
 
 .form-container {

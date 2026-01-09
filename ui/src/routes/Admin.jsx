@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Upload  from "../components/Upload.jsx"
+import Upload from "../components/Upload.jsx"
 import logo from "../assets/IFrame.png"
 import upload_img from "../assets/upload.png"
 import search_img from "../assets/search.png"
@@ -38,17 +38,6 @@ const Admin = () => {
                         </div>
 
                         <div className="content-div">
-                            <img src={search_img} alt="" />
-                            <p
-                                onClick={() => {
-                                    handleButtonClick("Search");
-                                }}
-                                className={Page === "Search" ? "active" : "non-active"}
-                            >
-                                Search
-                            </p>
-                        </div>
-                        <div className="content-div">
                             <img src={gallery_img} alt="" />
                             <p
                                 onClick={() => {
@@ -59,6 +48,19 @@ const Admin = () => {
                                 Gallery
                             </p>
                         </div>
+
+                        <div className="content-div">
+                            <img src={search_img} alt="" />
+                            <p
+                                onClick={() => {
+                                    handleButtonClick("Search");
+                                }}
+                                className={Page === "Search" ? "active" : "non-active"}
+                            >
+                                Search
+                            </p>
+                        </div>
+
                         <div className="content-div">
                             <img src={user_img} alt="" />
                             <p
@@ -112,7 +114,7 @@ const Admin = () => {
                     <div className="scrollable-section">
                         <div className="admin-topic-details">
                             {Page === "Upload Photo" && <Upload />}
-                             {Page === "Gallery" && <Gallery />}
+                            {Page === "Gallery" && <Gallery />}
                         </div>
                     </div>
                 </div>

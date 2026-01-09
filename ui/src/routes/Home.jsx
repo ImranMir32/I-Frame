@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import Upload  from "../components/Upload.jsx"
 import logo from "../assets/IFrame.png"
 import upload_img from "../assets/home.png"
 import search_img from "../assets/search.png"
-import gallery_img from "../assets/save.png"
+import save_img from "../assets/save.png"
 import user_img from "../assets/notifications.png"
 import request_img from "../assets/profile.gif"
-import draft_img from "../assets/draft.png"
 import logout_img from "../assets/logout.png"
 import "../styles/Admin.css";
-import Gallery from "../components/Gallery.jsx";
+import SaveItems from "../components/SaveItems.jsx";
 // import Post from "../components/Post.jsx";
 import Feed from "../components/Feed.jsx";
 
@@ -51,12 +49,12 @@ const Home = () => {
                             </p>
                         </div>
                         <div className="content-div">
-                            <img src={gallery_img} alt="" />
+                            <img src={save_img} alt="" />
                             <p
                                 onClick={() => {
-                                    handleButtonClick("Gallery");
+                                    handleButtonClick("Save Items");
                                 }}
-                                className={Page === "Gallery" ? "active" : "non-active"}
+                                className={Page === "Save Items" ? "active" : "non-active"}
                             >
                                 Save Items
                             </p>
@@ -69,7 +67,7 @@ const Home = () => {
                                 }}
                                 className={Page === "User List" ? "active" : "non-active"}
                             >
-                                notifications
+                                Notifications
                             </p>
                         </div>
                         <div className="content-div">
@@ -80,21 +78,9 @@ const Home = () => {
                                 }}
                                 className={Page === "User Request" ? "active" : "non-active"}
                             >
-                                User Request
+                                Profile
                             </p>
                         </div>
-                        <div className="content-div">
-                            <img src={draft_img} alt="" />
-                            <p
-                                onClick={() => {
-                                    handleButtonClick("Draft");
-                                }}
-                                className={Page === "Draft" ? "active" : "non-active"}
-                            >
-                                Draft
-                            </p>
-                        </div>
-
                         <div className="content-div">
                             <img src={logout_img} alt="" />
                             <p
@@ -114,7 +100,7 @@ const Home = () => {
                     <div className="scrollable-section">
                         <div className="admin-topic-details">
                             {Page === "Upload Photo" && <Feed />}
-                             {Page === "Gallery" && <Gallery />}
+                             {Page === "Save Items" && <SaveItems />}
                         </div>
                     </div>
                 </div>

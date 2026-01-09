@@ -31,7 +31,8 @@ const SignInForm = () => {
     if (res.status === 200) {
       localStorage.setItem("token", res.data.access_token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/home");
+      console.log("user role: ", res.user);
+      res.data.user.role === "admin" ? navigate("/admin-panel") : navigate("/home");
       actions.resetForm();
     } else {
       toast.error("Wrong email or password !", {
@@ -65,10 +66,8 @@ const SignInForm = () => {
       <main class="main">
         <div className="container">
           <div class="form-container">
-            {/* <h1 className="header">ContactHub</h1> */}
             <img className="logo" src={logo} alt="" />
             <form class="form" onSubmit={handleSubmit} autoComplete="off">
-              {/* email */}
               <div className="input-container">
                 <GrMail size={20} className="icon" />
                 <input
@@ -85,7 +84,6 @@ const SignInForm = () => {
                 <p className="error">{errors.email}</p>
               )}
 
-              {/* password */}
               <div className="input-container">
                 <RiLockPasswordLine size={22} className="icon" />
                 <input
@@ -103,14 +101,14 @@ const SignInForm = () => {
                   <BsFillEyeFill
                     size={20}
                     className="icon-right"
-                    color="rgb(24, 188, 230)"
+                    color="rgb(4, 22, 88)"
                     onClick={togglePasswordVisibility}
                   />
                 ) : (
                   <BsFillEyeSlashFill
                     size={20}
                     className="icon-right"
-                    color="rgb(24, 188, 230)"
+                    color="rgb(4, 22, 88)"
                     onClick={togglePasswordVisibility}
                   />
                 )}
@@ -119,13 +117,11 @@ const SignInForm = () => {
                 <p className="error">{errors.password}</p>
               )}
 
-              {/* button */}
               <button disabled={isSubmitting} type="submit" class="button">
                 Login
               </button>
               <ToastContainer />
 
-              {/* login  */}
               <div className="form-info">
                 Don't have an account?{" "}
                 <Link to="/signup" className="link">

@@ -9,9 +9,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { GrMail } from "react-icons/gr";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BiSolidUser } from "react-icons/bi";
-import { ImMobile } from "react-icons/im";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import { GlobalMethodsContext } from "../Context/GlobalMethodsContext";
+import logo from "../assets/IFrame.png"
+import "../styles/Form.css"
 
 const SignupForm = () => {
   const { SignUp } = useContext(GlobalMethodsContext);
@@ -29,16 +30,10 @@ const SignupForm = () => {
   };
 
   const onSubmit = async (values, actions) => {
-    const res = await SignUp(values);
-
-    if (res.status === 201) {
-      toast.success(`${res.data}`, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-      actions.resetForm();
+    const { confirmPassword, ...signupData } = values;
+    const res = await SignUp(signupData);
+    if (res === 201) {
+      navigate("/");
     } else if (res.status === 400) {
       toast.warning(`${res.data}`, {
         position: toast.POSITION.TOP_RIGHT,
@@ -65,7 +60,6 @@ const SignupForm = () => {
     initialValues: {
       name: "",
       email: "",
-      phone: "",
       password: "",
       confirmPassword: "",
     },
@@ -78,7 +72,7 @@ const SignupForm = () => {
       <main class="main">
         <div className="container">
           <div class="form-container-2">
-            <h1 className="header">ContactHub</h1>
+            <img className="logo" src={logo} alt="" />
             <form class="form" onSubmit={handleSubmit} autoComplete="off">
               {/* name */}
               <div className="input-container">
@@ -114,23 +108,6 @@ const SignupForm = () => {
                 <p className="error">{errors.email}</p>
               )}
 
-              {/* phone */}
-              <div className="input-container">
-                <ImMobile size={20} className="icon" />
-                <input
-                  value={values.phone}
-                  onChange={handleChange}
-                  id="phone"
-                  type="text"
-                  placeholder="Enter your phone number"
-                  onBlur={handleBlur}
-                  className={errors.phone && touched.phone ? "input-error" : ""}
-                />
-              </div>
-              {errors.phone && touched.phone && (
-                <p className="error">{errors.phone}</p>
-              )}
-
               {/* password */}
               <div className="input-container">
                 <RiLockPasswordLine size={22} className="icon" />
@@ -149,14 +126,14 @@ const SignupForm = () => {
                   <BsFillEyeFill
                     size={20}
                     className="icon-right"
-                    color="rgb(24, 188, 230)"
+                    color="rgb(4, 22, 88)"
                     onClick={togglePasswordVisibility}
                   />
                 ) : (
                   <BsFillEyeSlashFill
                     size={20}
                     className="icon-right"
-                    color="rgb(24, 188, 230)"
+                    color="rgb(4, 22, 88)"
                     onClick={togglePasswordVisibility}
                   />
                 )}
@@ -185,14 +162,14 @@ const SignupForm = () => {
                   <BsFillEyeFill
                     size={20}
                     className="icon-right"
-                    color="rgb(24, 188, 230)"
+                    color="rgb(4, 22, 88)"
                     onClick={togglePasswordVisibility2}
                   />
                 ) : (
                   <BsFillEyeSlashFill
                     size={20}
                     className="icon-right"
-                    color="rgb(24, 188, 230)"
+                    color="rgb(4, 22, 88)"
                     onClick={togglePasswordVisibility2}
                   />
                 )}
