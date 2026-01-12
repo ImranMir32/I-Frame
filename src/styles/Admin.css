@@ -99,3 +99,100 @@ body {
   min-height: 150vh;
 }
 */
+
+/* Search Bar Styles */
+.search-section {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-form {
+    width: 100%;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 24px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    opacity: 0.6;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 14px;
+    padding: 6px 0;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+/* Search Results Info */
+.search-results-info {
+    background: #f8f9fa;
+    padding: 15px;
+    margin: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.search-results-info p {
+    margin: 5px 0;
+    color: #495057;
+}
+
+.no-results {
+    color: #dc3545;
+    font-style: italic;
+    margin-top: 10px !important;
+}
+
+/* Loading and Error States */
+.loading, .no-posts, .error {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+}
+
+.error {
+    color: #dc3545;
+    background: #f8d7da;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+.search-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+    margin-left: 10px;
+}
+
+.search-button:hover {
+    background: #0056b3;
+}

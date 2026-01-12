@@ -14,11 +14,16 @@ import Feed from "../components/Feed.jsx";
 
 const Home = () => {
     const [Page, setPage] = useState("Upload Photo");
+    const [searchQuery, setSearchQuery] = useState("");
 
     const handleButtonClick = (param) => {
         setPage(param);
     };
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        // Search functionality will be handled in Feed component
+    };
     return (
         <div>
             <div className="admin-container">
@@ -37,17 +42,6 @@ const Home = () => {
                             </p>
                         </div>
 
-                        <div className="content-div">
-                            <img src={search_img} alt="" />
-                            <p
-                                onClick={() => {
-                                    handleButtonClick("Search");
-                                }}
-                                className={Page === "Search" ? "active" : "non-active"}
-                            >
-                                Search
-                            </p>
-                        </div>
                         <div className="content-div">
                             <img src={save_img} alt="" />
                             <p
@@ -99,8 +93,37 @@ const Home = () => {
                     {/* <h1>{Page}</h1> */}
                     <div className="scrollable-section">
                         <div className="admin-topic-details">
-                            {Page === "Upload Photo" && <Feed />}
-                             {Page === "Save Items" && <SaveItems />}
+                            {/* {Page === "Upload Photo" && <Feed />} */}
+                            {/* {Page === "Upload Photo" && <Feed searchQuery={searchQuery} />} */}
+                            {Page === "Upload Photo" && (
+                                <>
+                                    {/* Search Bar in Main Content */}
+                                    <div className="main-search-bar">
+                                        <form onSubmit={handleSearch} className="search-form">
+                                            <div className="search-input-wrapper">
+                                                <img
+                                                    src={search_img}
+                                                    alt="Search"
+                                                    className="search-icon"
+                                                    onClick={handleSearch}
+                                                />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search Based on Metadata..."
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                                    className="search-input"
+                                                />
+                                                <button type="submit" className="search-button">
+                                                    Search
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <Feed searchQuery={searchQuery} />
+                                </>
+                            )}
+                            {Page === "Save Items" && <SaveItems />}
                         </div>
                     </div>
                 </div>
