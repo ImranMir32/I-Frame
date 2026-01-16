@@ -1,14 +1,31 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import Post from "./Post";
 import { GlobalMethodsContext } from "../Context/GlobalMethodsContext";
-import { GlobalStateContext } from "../Context/Global_Context"; // Import GlobalStateContext
+import { GlobalStateContext } from "../Context/Global_Context";
 
-const Feed = () => {
+const Feed = ({ searchQuery = "" }) => {
   const { AllPosts } = useContext(GlobalMethodsContext);
-  const { user } = useContext(GlobalStateContext); // Get user from context
-  const [posts, setPosts] = useState([]);
+  const { user } = useContext(GlobalStateContext);
+  const [allPosts, setAllPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Filter posts based on search query
+  const filterPosts = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return allPosts;
+    }
+    
+    const query = searchQuery.toLowerCase();
+    return allPosts.filter(post => 
+      post.title.toLowerCase().includes(query)
+    );
+  }, [allPosts, searchQuery]);
+
+  useEffect(() => {
+    setFilteredPosts(filterPosts);
+  }, [filterPosts]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -18,7 +35,7 @@ const Feed = () => {
         
         if (data === 500) {
           setError("Failed to fetch posts. Please try again later.");
-          setPosts([]);
+          setAllPosts([]);
         } else {
           // Add isLiked field to each post based on current user
           const processedPosts = data.map(post => ({
@@ -27,12 +44,12 @@ const Feed = () => {
             isSaved: user && user.savedPhotos ? user.savedPhotos.includes(post.id) : false
           }));
           
-          setPosts(processedPosts);
+          setAllPosts(processedPosts);
           setError(null);
         }
       } catch (err) {
         setError("An unexpected error occurred.");
-        setPosts([]);
+        setAllPosts([]);
         console.error(err);
       } finally {
         setLoading(false);
@@ -40,27 +57,39 @@ const Feed = () => {
     };
 
     fetchPosts();
-  }, [AllPosts, user]); // Add user to dependency array
+  }, [AllPosts, user]);
 
   if (loading) {
-    return <div>Loading posts...</div>;
+    return <div className="loading">Loading posts...</div>;
   }
 
   if (error) {
     return <div className="error">{error}</div>;
   }
 
-  if (posts.length === 0) {
-    return <div>No posts available.</div>;
-  }
-
-  console.log("posts in feed: ", posts);
-  console.log("user in feed: ", user);
   return (
     <>
-      {posts.map((p) => (
-        <Post key={p.id} post={p} />
-      ))}
+      {/* Search Results Info */}
+      {searchQuery.trim() && (
+        <div className="search-results-info">
+          <p>
+            Found {filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''} 
+            {allPosts.length > 0 && ` (filtered from ${allPosts.length} total)`}
+          </p>
+          {filteredPosts.length === 0 && allPosts.length > 0 && (
+            <p className="no-results">No posts found with title containing "{searchQuery}"</p>
+          )}
+        </div>
+      )}
+      
+      {/* Posts */}
+      {filteredPosts.length === 0 && !searchQuery.trim() ? (
+        <div className="no-posts">No posts available.</div>
+      ) : (
+        filteredPosts.map((p) => (
+          <Post key={p.id} post={p} />
+        ))
+      )}
     </>
   );
 };

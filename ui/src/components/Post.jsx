@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import "../styles/Post.css";
 import admin from "../assets/admin.png";
-import unsave from "../assets/unsave.png";
-import save from "../assets/save..png";
 import { GlobalMethodsContext } from "../Context/GlobalMethodsContext";
 import { GlobalStateContext } from "../Context/Global_Context";
+import { FaHeart, FaComment, FaBookmark, FaEllipsisH } from "react-icons/fa";
+import { formatDistanceToNow } from 'date-fns';
 
 const Post = ({ post }) => {
   const { addComment, likePost, unlikePost, savePost, unsavePost } = useContext(GlobalMethodsContext);
@@ -53,7 +53,7 @@ const Post = ({ post }) => {
     }
 
     if (isSaving) return;
-    
+
     setIsSaving(true);
     try {
       if (saved) {
@@ -94,7 +94,7 @@ const Post = ({ post }) => {
       };
 
       const result = await addComment(post.id, commentData);
-      
+
       if (result && !result.error) {
         const newComment = {
           userName: commentData.userName,
@@ -102,7 +102,7 @@ const Post = ({ post }) => {
           text: commentData.text,
           createdAt: new Date().toISOString(),
         };
-        
+
         setComments(prev => [...prev, newComment]);
         setComment("");
       }
@@ -112,63 +112,117 @@ const Post = ({ post }) => {
       setIsSubmitting(false);
     }
   };
+console.log("Rendering Post component with post:", post.createdAt);
+
+const formatDate = (dateString) => {
+    return formatDistanceToNow(new Date(dateString), { addSuffix: true });
+    // Returns: "about 2 hours ago", "3 days ago", "1 month ago", etc.
+  };
 
   return (
-    <div className="post-card">
-      <div className="post-header">
-        <img src={admin} alt="admin" className="avatar" />
-        <span className="username">Admin</span>
+    <div className="magazine-post">
+      {/* Left Column - Content */}
+      <div className="post-content">
+
+
+        <div className="post-header">
+          <img src={admin} alt="admin" className="author-avatar" />
+          <div className="author-info">
+            <h3 className="author-name">Admin</h3>
+            <span className="post-time">{formatDate(post.createdAt)}</span>
+          </div>
+          <button className="more-options">
+            <FaEllipsisH />
+          </button>
+        </div>
+
+        <h2 className="post-title">{post.title}</h2>
+
+        <div className="post-image-container">
+          <img src={post.imgUrl} alt="post" className="featured-image" />
+          <div className="image-overlay">
+            <span className="image-caption"></span>
+          </div>
+        </div>
+
+
+
+        <div className="action-stats">
+          <div className="stat-item">
+            <FaHeart className={liked ? "stat-icon liked" : "stat-icon"} />
+            <span>{likes} Likes</span>
+          </div>
+          <div className="stat-item">
+            <FaComment className="stat-icon" />
+            <span>{comments.length} Comments</span>
+          </div>
+        </div>
       </div>
 
-      <div className="post-caption">{post.title}</div>
+      {/* Right Column - Sidebar */}
+      <div className="post-sidebar">
+        <div className="sidebar-section">
+          <h4>Recent Comments</h4>
+          <div className="comments-list">
+            {comments.slice(0, 3).map((c, i) => (
+              <div key={i} className="sidebar-comment">
+                <strong>{c.userName}:</strong>
+                <p>{c.text.length > 40 ? c.text.substring(0, 40) + '...' : c.text}</p>
+              </div>
+            ))}
+            {comments.length === 0 && (
+              <p className="no-comments">No comments yet. Be the first!</p>
+            )}
+          </div>
+        </div>
 
-      <div className="post-image">
-        <img src={post.imgUrl} alt="post" />
+        <div className="sidebar-section">
+          <h4>Interact</h4>
+          <div className="interaction-buttons">
+            <button
+              onClick={toggleLike}
+              className={`action-btn ${liked ? 'liked-btn' : ''}`}
+              disabled={!user}
+            >
+              <FaHeart /> {liked ? 'Liked' : 'Like'}
+            </button>
+            <button
+              className="action-btn"
+              onClick={() => document.querySelector('.comment-input').focus()}
+              disabled={!user}
+            >
+              <FaComment /> Comment
+            </button>
+            <button
+              onClick={toggleSave}
+              className="action-btn"
+            >
+              <FaBookmark className={saved ? 'saved' : ''} />
+              {saved ? 'Saved' : 'Save'}
+            </button>
+          </div>
+        </div>
+
+        <div className="sidebar-section">
+          <h4>Add Comment</h4>
+          <form className="sidebar-comment-form" onSubmit={handleAddComment}>
+            <textarea
+              className="comment-input"
+              placeholder={user ? "Share your thoughts..." : "Login to comment"}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              rows="3"
+            />
+            <button
+              type="submit"
+              className="submit-comment"
+              disabled={!comment.trim() || isSubmitting || !user}
+            >
+              {isSubmitting ? "Posting..." : "Post Comment"}
+            </button>
+          </form>
+        </div>
       </div>
-
-      <div className="post-actions">
-        <button 
-          onClick={toggleLike} 
-          className={liked ? "liked" : ""}
-          disabled={!user}
-        >
-          {liked ? "❤️" : "🤍"}
-        </button>
-        <span className="likes">{likes} likes</span>
-
-         <button 
-          onClick={toggleSave}
-          className={`save-btn ${saved ? "saved" : ""}`}
-          disabled={!user || isSaving}
-          style={{ marginLeft: 'auto' }}
-        >
-          <img src={saved ? save : unsave} alt="img" className="save-icon" />
-        </button>
-      </div>
-
-      <div className="post-comments">
-        {comments.map((c, i) => (
-          <p key={i}>
-            <strong>{c.userName}: </strong> {c.text}
-          </p>
-        ))}
-      </div>
-
-      <form className="comment-box" onSubmit={handleAddComment}>
-        <input
-          type="text"
-          placeholder={user ? "Add a comment..." : "Login to comment"}
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          disabled={!user || isSubmitting}
-        />
-        <button 
-          type="submit" 
-          disabled={!user || !comment.trim() || isSubmitting}
-        >
-          {isSubmitting ? "Posting..." : "Post"}
-        </button>
-      </form>
     </div>
   );
 };
